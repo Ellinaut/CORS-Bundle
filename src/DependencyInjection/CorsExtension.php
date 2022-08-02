@@ -26,7 +26,7 @@ class CorsExtension extends ConfigurableExtension
                 [
                     'event' => 'kernel.request',
                     'method' => 'onKernelRequest',
-                    'priority' => 10
+                    'priority' => 50
                 ]
             );
 
@@ -35,8 +35,8 @@ class CorsExtension extends ConfigurableExtension
             ->addTag(
                 'kernel.event_listener',
                 [
-                    'event' => 'kernel.request',
-                    'method' => 'onKernelRequest'
+                    'event' => 'kernel.response',
+                    'method' => 'onKernelResponse'
                 ]
             );
     }
