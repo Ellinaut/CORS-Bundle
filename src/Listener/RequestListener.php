@@ -4,9 +4,9 @@ namespace Ellinaut\CorsBundle\Listener;
 
 use Ellinaut\CorsBundle\Provider\ConfigurationProvider;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 
 /**
  * @author Philipp Marien
@@ -30,9 +30,7 @@ class RequestListener extends AbstractCorsListener
             return;
         }
 
-        try {
-            $this->requestMatcher->matchRequest($event->getRequest());
-        } catch (\Throwable $throwable) {
+        if (!$this->requestMatcher->matches($event->getRequest())) {
             // if no options request is configured explicitly...
             $config = $this->configurationProvider->getConfig($event->getRequest()->getPathInfo());
             if ($config->get('handle_options')) {
