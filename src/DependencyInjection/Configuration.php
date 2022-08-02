@@ -16,8 +16,8 @@ class Configuration implements ConfigurationInterface
         $root = $builder->getRootNode()->children();
 
         $pattern = $root->arrayNode('patterns')
-            ->arrayPrototype()
             ->useAttributeAsKey('pattern')
+            ->arrayPrototype()
             ->children();
 
         $pattern->booleanNode('handle_options')->defaultTrue();
