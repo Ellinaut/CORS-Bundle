@@ -7,7 +7,6 @@ use Ellinaut\CorsBundle\Listener\ResponseListener;
 use Ellinaut\CorsBundle\Provider\ConfigurationProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
-use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 
 /**
  * @author Philipp Marien
@@ -19,10 +18,6 @@ class CorsExtension extends ConfigurableExtension
         $container->autowire(ConfigurationProvider::class)
             ->setPublic(false)
             ->setArgument('$configuration', $mergedConfig);
-
-        if (!$container->hasAlias(RequestMatcherInterface::class)) {
-            $container->setAlias(RequestMatcherInterface::class, 'router.default');
-        }
 
         $container->autowire(RequestListener::class)
             ->setPublic(true)
