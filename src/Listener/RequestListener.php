@@ -6,6 +6,7 @@ use Ellinaut\CorsBundle\Provider\ConfigurationProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Routing\Exception\ExceptionInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -31,12 +32,16 @@ class RequestListener extends AbstractCorsListener
         }
 
         $optionsConfigured = false;
-        foreach ($this->router->match($event->getRequest()->getPathInfo()) as $route) {
-            $routeConfig = $this->router->getRouteCollection()->get($route);
-            if ($routeConfig && in_array(Request::METHOD_OPTIONS, $routeConfig->getMethods(), true)) {
-                $optionsConfigured = true;
-                break;
+        try {
+            foreach ($this->router->match($event->getRequest()->getPathInfo()) as $route) {
+                $routeConfig = $this->router->getRouteCollection()->get($route);
+                if ($routeConfig && in_array(Request::METHOD_OPTIONS, $routeConfig->getMethods(), true)) {
+                    $optionsConfigured = true;
+                    break;
+                }
             }
+        } catch (ExceptionInterface $exception) {
+
         }
 
         if (!$optionsConfigured) {
